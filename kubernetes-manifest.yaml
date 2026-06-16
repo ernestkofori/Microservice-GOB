@@ -1,0 +1,622 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emailservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emailservice
+  template:
+    metadata:
+      labels:
+        app: emailservice
+    spec:
+      containers:
+      - name: emailservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/emailservice:v0.10.5
+        ports:
+        - containerPort: 8080      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "8080"            # Set the PORT environment variable to match the containerPort
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: emailservice              # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: emailservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8081                   # The port exposed outside the cluster
+    targetPort: 8080             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendationservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendationservice
+  template:
+    metadata:
+      labels:
+        app: recommendationservice
+    spec:
+      containers:
+      - name: recommendationservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/recommendationservice:v0.10.5
+        ports:
+        - containerPort: 8080      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "8080"            # Set the PORT environment variable to match the containerPort
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"  # Set the address of the product catalog service
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendationservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: recommendationservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8082                   # The port exposed outside the cluster
+    targetPort: 8080             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productcatalogservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productcatalogservice
+  template:
+    metadata:
+      labels:
+        app: productcatalogservice
+    spec:
+      containers:
+      - name: productcatalogservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/productcatalogservice:v0.10.5
+        ports:
+        - containerPort: 8080      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "8080"            # Set the PORT environment variable to match the containerPort
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: productcatalogservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: productcatalogservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 3550                   # The port exposed outside the cluster
+    targetPort: 8080             # The port inside your container to forward to 
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paymentservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paymentservice
+  template:
+    metadata:
+      labels:
+        app: paymentservice
+    spec:
+      containers:
+      - name: paymentservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/paymentservice:v0.10.5
+        ports:
+        - containerPort: 50051      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "50051"            # Set the PORT environment variable to match the containerPort
+        - name: DISABLE_PROFILER
+          value: "true"             # Disable the profiler to reduce CPU usage in this demo
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 50051
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 50051
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: paymentservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: paymentservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8083                   # The port exposed outside the cluster
+    targetPort: 50051             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shippingservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shippingservice
+  template:
+    metadata:
+      labels:
+        app: shippingservice
+    spec:
+      containers:
+      - name: shippingservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shippingservice:v0.10.5
+        ports:
+        - containerPort: 50051      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "50051"            # Set the PORT environment variable to match the containerPort 
+        - name: DISABLE_PROFILER
+          value: "true"             # Disable the profiler to reduce CPU usage in this demo
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 50051
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 50051
+          periodSeconds: 5
+          initialDelaySeconds: 10
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: shippingservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: shippingservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8084                   # The port exposed outside the cluster
+    targetPort: 50051             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adservice
+  template:
+    metadata:
+      labels:
+        app: adservice
+    spec:
+      containers:
+      - name: adservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/adservice:v0.10.5
+        ports:
+        - containerPort: 9555      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "9555"            # Set the PORT environment variable to match the containerPort   
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 9555
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 9555
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+
+  name: adservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: adservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8085                   # The port exposed outside the cluster
+    targetPort: 9555             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currencyservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: currencyservice
+  template:
+    metadata:
+      labels:
+        app: currencyservice
+    spec:
+      containers:
+      - name: currencyservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/currencyservice:v0.10.5
+        ports:
+        - containerPort: 7000      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "7000"            # Set the PORT environment variable to match the containerPort
+        - name: DISABLE_PROFILER
+          value: "true"             # Disable the profiler to reduce CPU usage in this demo
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 7000
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc: 
+            port: 7000
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: currencyservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: currencyservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8086                   # The port exposed outside the cluster
+    targetPort: 7000             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cartservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cartservice
+  template:
+    metadata:
+      labels:
+        app: cartservice
+    spec:
+      containers:
+      - name: cartservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/cartservice:v0.10.5
+        ports:
+        - containerPort: 7070      # The port your app code listens on
+        env:
+        - name: PORT  
+          value: "7070"            # Set the PORT environment variable to match the containerPort
+        - name: REDIS_ADDR
+          value: "redis:6379"     # Set the address of the Redis service
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 7070
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc: 
+            port: 7070
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cartservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: cartservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8087                   # The port exposed outside the cluster
+    targetPort: 7070             # The port inside your container to forward to 
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis-container
+        image: redis:6.0-alpine
+        ports:
+        - containerPort: 6379      # The port Redis listens on
+        volumeMounts:
+        - mountPath: /data          # Mount the volume at /data inside the container
+          name: redis-data          # Name of the volume to mount
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"             # Allow Redis to start without a password for simplicity in this demo
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          tcpSocket:
+            port: 6379
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          tcpSocket:
+            port: 6379
+          periodSeconds: 5
+          initialDelaySeconds: 10
+      volumes:
+      - name: redis-data
+        emptyDir: {}               # Use an emptyDir volume for Redis data (not persistent, suitable for demo purposes only)
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: redis                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 6379                   # The port exposed outside the cluster
+    targetPort: 6379             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkoutservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkoutservice
+  template:
+    metadata:
+      labels:
+        app: checkoutservice
+    spec:
+      containers:
+      - name: checkoutservice-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/checkoutservice:v0.10.5
+        ports:
+        - containerPort: 5050      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "5050"            # Set the PORT environment variable to match the containerPort
+        - name: PAYMENT_SERVICE_ADDR
+          value: "paymentservice:8083"  # Set the address of the payment service
+        - name: SHIPPING_SERVICE_ADDR
+          value: "shippingservice:8084"  # Set the address of the shipping service
+        - name: CURRENCY_SERVICE_ADDR
+          value: "currencyservice:8086"  # Set the address of the currency service  
+        - name: EMAIL_SERVICE_ADDR
+          value: "emailservice:8081"  # Set the address of the email service
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"  # Set the address of the product catalog service 
+        - name: CART_SERVICE_ADDR
+          value: "cartservice:8087"  # Set the address of the cart service
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 5050
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 5050
+          periodSeconds: 5
+          initialDelaySeconds: 10
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkoutservice            # This must match your minikube service command
+spec:
+  type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+  selector:
+    app: checkoutservice                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 8089                   # The port exposed outside the cluster
+    targetPort: 5050             # The port inside your container to forward to
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend-container
+        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/frontend:v0.10.5
+        ports:
+        - containerPort: 8080      # The port your app code listens on
+        env:
+        - name: PORT
+          value: "8080"            # Set the PORT environment variable to match the containerPort
+        - name: CHECKOUT_SERVICE_ADDR
+          value: "checkoutservice:8089"  # Set the address of the checkout service
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"  # Set the address of the product catalog service
+        - name: CART_SERVICE_ADDR
+          value: "cartservice:8087"  # Set the address of the cart service
+        - name: RECOMMENDATION_SERVICE_ADDR
+          value: "recommendationservice:8082"  # Set the address of the recommendation service
+        - name: AD_SERVICE_ADDR
+          value: "adservice:8085"  # Set the address of the ad service
+        - name: CURRENCY_SERVICE_ADDR
+          value: "currencyservice:8086"  # Set the address of the currency service  
+        - name: SHIPPING_SERVICE_ADDR 
+          value: "shippingservice:8084"  # Set the address of the shipping service
+        - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+          value: "shoppingassistantservice:80"  # Set the address of the shopping assistant service  
+        livenessProbe:             # Checking the health of the container to ensure it is running properly
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+          grpc:
+            port: 8080
+          periodSeconds: 5
+          initialDelaySeconds: 10
+  
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend            # This must match your minikube service command
+spec:
+  type: NodePort                 # NodePort exposes the port outside the cluster.
+  selector:
+    app: frontend                 # <-- This tells the Service which Pods to route to
+  ports:
+  - port: 80                     # The port exposed outside the cluster
+    targetPort: 8080             # The port inside your container to forward to
+
+---
+
+# apiVersion: v1
+# kind: deployment
+# metadata:
+#   name: shoppingassistant-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: shoppingassistant
+#   template:
+#     metadata:
+#       labels:
+#         app: shoppingassistant
+#     spec:
+#       containers:
+#       - name: shoppingassistant-container
+#         image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shoppingassistant:v0.10.5
+#         ports:
+#         - containerPort: 8080      # The port your app code listens on
+#         env:
+#         - name: PORT
+#           value: "8080"            # Set the PORT environment variable to match the containerPort 
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: shoppingassistant            # This must match your minikube service command
+# spec:
+#   type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
+#   selector:
+#     app: shoppingassistant                 # <-- This tells the Service which Pods to route to
+#   ports:
+#   - port: 8090                   # The port exposed outside the cluster
+#     targetPort: 8080             # The port inside your container to forward to
