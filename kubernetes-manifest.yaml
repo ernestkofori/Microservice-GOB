@@ -556,16 +556,16 @@ spec:
           value: "shippingservice:8084"  # Set the address of the shipping service
         - name: SHOPPING_ASSISTANT_SERVICE_ADDR
           value: "shoppingassistantservice:80"  # Set the address of the shopping assistant service  
-        livenessProbe:             # Checking the health of the container to ensure it is running properly
-          grpc:
-            port: 8080
-          periodSeconds: 5
-          initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
-          grpc:
-            port: 8080
-          periodSeconds: 5
-          initialDelaySeconds: 10
+        # livenessProbe:             # Checking the health of the container to ensure it is running properly
+        #   grpc:
+        #     port: 8080
+        #   periodSeconds: 5
+        #   initialDelaySeconds: 10
+        # readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        #   grpc:
+        #     port: 8080
+        #   periodSeconds: 5
+        #   initialDelaySeconds: 10
   
 
 ---
@@ -583,40 +583,3 @@ spec:
     targetPort: 8080             # The port inside your container to forward to
 
 ---
-
-# apiVersion: v1
-# kind: deployment
-# metadata:
-#   name: shoppingassistant-deployment
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: shoppingassistant
-#   template:
-#     metadata:
-#       labels:
-#         app: shoppingassistant
-#     spec:
-#       containers:
-#       - name: shoppingassistant-container
-#         image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shoppingassistant:v0.10.5
-#         ports:
-#         - containerPort: 8080      # The port your app code listens on
-#         env:
-#         - name: PORT
-#           value: "8080"            # Set the PORT environment variable to match the containerPort 
-
-# ---
-
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: shoppingassistant            # This must match your minikube service command
-# spec:
-#   type: ClusterIP                 # ClusterIP does not expose the port outside the cluster.
-#   selector:
-#     app: shoppingassistant                 # <-- This tells the Service which Pods to route to
-#   ports:
-#   - port: 8090                   # The port exposed outside the cluster
-#     targetPort: 8080             # The port inside your container to forward to
