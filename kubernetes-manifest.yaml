@@ -30,6 +30,13 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+          requests:
+            cpu: "100m"             # Request 100 millicores of CPU
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"             # Limit to 200 millicores of CPU
+            memory: "256Mi"         # Limit to 256 MiB of memory
 
 
 
@@ -83,6 +90,13 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:
+          requests:
+            cpu: "100m"           # Request 100 millicores of CPU
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"           # Limit to 200 millicores of CPU
+            memory: "256Mi"         # Limit to 256 MiB of memory
 
 ---
 
@@ -132,6 +146,13 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"         # Request 128 MiB of memory 
+          limits:
+            cpu: "200m"
+            memory: "256Mi"         # Limit to 256 MiB of memory
 
 ---
 
@@ -183,6 +204,14 @@ spec:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:
+          requests: 
+            cpu: "100m"
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"
+            memory: "256Mi"         # Limit to 256 MiB of memory
+
 
 ---
 
@@ -234,6 +263,13 @@ spec:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"
+            memory: "256Mi"         # Limit to 256 MiB of memory
 --- 
 
 apiVersion: v1
@@ -282,6 +318,14 @@ spec:
             port: 9555
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+          requests:
+            cpu: "100m"             # Request 100 millicores of CPU
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"             # Limit to 200 millicores of CPU  
+            memory: "256Mi"         # Limit to 256 MiB of memory
+
 
 --- 
 
@@ -334,6 +378,14 @@ spec:
             port: 7000
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+          requests:
+            cpu: "100m"             # Request 100 millicores of CPU
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"             # Limit to 200 millicores of CPU  
+            memory: "256Mi"         # Limit to 256 MiB of memory
+
 
 ---
 
@@ -385,7 +437,13 @@ spec:
             port: 7070
           periodSeconds: 5
           initialDelaySeconds: 10
-
+        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+          requests:
+            cpu: "100m"             # Request 100 millicores of CPU
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"             # Limit to 200 millicores of CPU  
+            memory: "256Mi"         # Limit to 256 MiB of memory
 ---
 
 apiVersion: v1
@@ -437,6 +495,13 @@ spec:
             port: 6379
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+          requests:
+            cpu: "70m"             # Request 70 millicores of CPU
+            memory: "200Mi"         # Request 200 MiB of memory
+          limits:
+            cpu: "100m"             # Limit to 100 millicores of CPU  
+            memory: "400Mi"         # Limit to 400 MiB of memory
       volumes:
       - name: redis-data
         emptyDir: {}               # Use an emptyDir volume for Redis data (not persistent, suitable for demo purposes only)
@@ -501,6 +566,13 @@ spec:
             port: 5050
           periodSeconds: 5
           initialDelaySeconds: 10
+        resources:
+          requests: 
+            cpu: "100m"
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"
+            memory: "256Mi"         # Limit to 256 MiB of memory
 
 ---
 
@@ -566,7 +638,13 @@ spec:
         #     port: 8080
         #   periodSeconds: 5
         #   initialDelaySeconds: 10
-  
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"         # Request 128 MiB of memory
+          limits:
+            cpu: "200m"
+            memory: "256Mi"         # Limit to 256 MiB of memory
 
 ---
 
