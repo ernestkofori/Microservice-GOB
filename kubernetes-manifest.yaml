@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: emailservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: emailservice
@@ -61,7 +61,7 @@ kind: Deployment
 metadata:
   name: recommendationservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: recommendationservice
@@ -119,7 +119,7 @@ kind: Deployment
 metadata:
   name: productcatalogservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: productcatalogservice
@@ -175,7 +175,7 @@ kind: Deployment
 metadata:
   name: paymentservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: paymentservice
@@ -234,7 +234,7 @@ kind: Deployment
 metadata:
   name: shippingservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: shippingservice
@@ -291,7 +291,7 @@ kind: Deployment
 metadata:
   name: adservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: adservice
@@ -349,7 +349,7 @@ kind: Deployment
 metadata:
   name: currencyservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: currencyservice
@@ -408,7 +408,7 @@ kind: Deployment
 metadata:
   name: cartservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: cartservice
@@ -495,7 +495,7 @@ spec:
             port: 6379
           periodSeconds: 5
           initialDelaySeconds: 10
-        resources:                 # Set resource requests and limits to ensure the container has enough resources to run properly
+        resources:                 # Set resource requests and limits to ensurfe the container has enough resources to run properly
           requests:
             cpu: "70m"             # Request 70 millicores of CPU
             memory: "200Mi"         # Request 200 MiB of memory
@@ -527,7 +527,7 @@ kind: Deployment
 metadata:
   name: checkoutservice-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: checkoutservice
@@ -595,7 +595,7 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: frontend
