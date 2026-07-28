@@ -25,7 +25,7 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 8080
           periodSeconds: 5
@@ -85,12 +85,12 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
-        resources:
+        resources:                # Set resource requests and limits to ensure the container has enough resources to run properly
           requests:
             cpu: "100m"           # Request 100 millicores of CPU
             memory: "128Mi"         # Request 128 MiB of memory
@@ -141,12 +141,12 @@ spec:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 8080
           periodSeconds: 5
           initialDelaySeconds: 10
-        resources:
+        resources:                # Set resource requests and limits to ensure the container has enough resources to run properly
           requests:
             cpu: "100m"
             memory: "128Mi"         # Request 128 MiB of memory 
@@ -199,12 +199,12 @@ spec:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
-        resources:
+        resources:                  # Set resource requests and limits to ensure the container has enough resources to run properly
           requests: 
             cpu: "100m"
             memory: "128Mi"         # Request 128 MiB of memory
@@ -258,12 +258,12 @@ spec:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 50051
           periodSeconds: 5
           initialDelaySeconds: 10
-        resources:
+        resources:                  # Set resource requests and limits to ensure the container has enough resources to run properly 
           requests:
             cpu: "100m"
             memory: "128Mi"         # Request 128 MiB of memory
@@ -313,7 +313,7 @@ spec:
             port: 9555
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 9555
           periodSeconds: 5
@@ -373,7 +373,7 @@ spec:
             port: 7000
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc: 
             port: 7000
           periodSeconds: 5
@@ -432,7 +432,7 @@ spec:
             port: 7070
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc: 
             port: 7070
           periodSeconds: 5
@@ -490,7 +490,7 @@ spec:
             port: 6379
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           tcpSocket:
             port: 6379
           periodSeconds: 5
@@ -561,7 +561,7 @@ spec:
             port: 5050
           periodSeconds: 5
           initialDelaySeconds: 10
-        readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
+        readinessProbe:            # Checking the application if it's running healthy and ready to server and receive traffic.
           grpc:
             port: 5050
           periodSeconds: 5
@@ -628,16 +628,11 @@ spec:
           value: "shippingservice:8084"  # Set the address of the shipping service
         - name: SHOPPING_ASSISTANT_SERVICE_ADDR
           value: "shoppingassistantservice:80"  # Set the address of the shopping assistant service  
-        # livenessProbe:             # Checking the health of the container to ensure it is running properly
-        #   grpc:
-        #     port: 8080
-        #   periodSeconds: 5
-        #   initialDelaySeconds: 10
-        # readinessProbe:            # Checking the health of the container to ensure it is ready to serve traffic 
-        #   grpc:
-        #     port: 8080
-        #   periodSeconds: 5
-        #   initialDelaySeconds: 10
+        readinessProbe:               # Checking the application frontend if it's running healthy and ready to server and receive traffic.
+            initialDelaySeconds: 10
+            httpGet:
+              path: "/_healthz"
+              port: 8080
         resources:
           requests:
             cpu: "100m"

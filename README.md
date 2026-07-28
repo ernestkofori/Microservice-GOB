@@ -31,7 +31,7 @@ The application runs as a collection of decoupled microservices that communicate
 * **External Access:** Exposed the web application to external host traffic by utilizing a **NodePort Service** on the `frontend` component, routing incoming external HTTP traffic (Port 80) to the container’s listening application port (Port 8080).
 
 ### 3. Reliability & Proactive Resource Management
-* **Self-Healing Mechanics:** Engineered explicit `livenessProbe` and `readinessProbe` health checks utilizing native microservice gRPC ports. This ensures the cluster automatically restarts unhealthy containers and blocks traffic from reaching pods that are still initializing.
+* **Self-Healing Mechanics:** Engineered explicit `livenessProbe` and `readinessProbe` health checks utilizing native microservice gRPC and httpGet ports. This ensures the cluster automatically restarts unhealthy containers and blocks traffic from reaching pods that are still initializing.
 * **Resource Constraints:** Implemented deterministic CPU and Memory budgeting (allocating a standard request of `100m` CPU / `128Mi` memory with rigid ceilings of `200m` CPU / `256Mi` memory) across all microservices to guarantee predictable scheduling and completely eliminate "noisy-neighbor" issues over a shared local hardware plane.
 
 ---
@@ -87,3 +87,4 @@ minikube service frontend --url
 - [ ] **Config Decoupling:** Externalize environmental parameters and connection strings out of raw inline manifests and into dedicated Kubernetes `ConfigMaps` and `Secrets`.
 - [ ] **Ingress Routing:** Implement an NGINX Ingress Controller to replace standard `NodePort` exposures for unified path-based domain routing (`/`, `/cart`, `/checkout`).
 - [ ] **Observability Engine:** Integrate an automated Prometheus and Grafana monitoring stack inside a separate namespace to track live memory/CPU consumption metrics and track gRPC traffic behavior.
+- [ ] **Network Security :** Even though I used NodePort as the service type for the frontend service, the best practice would be to use either a Load Balancer or an Ingress Controller to limit direct public access to the application.
